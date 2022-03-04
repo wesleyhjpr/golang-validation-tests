@@ -58,7 +58,6 @@ func GetStudentById(c *gin.Context) {
 func DeleteStudent(c *gin.Context) {
 	var student models.Student
 	id := c.Params.ByName("id")
-	database.DB.First(&student, id)
 
 	database.DB.Delete(&student, id)
 
@@ -83,9 +82,8 @@ func UpdateStudent(c *gin.Context) {
 		return
 	}
 
-	database.DB.Model(&student).UpdateColumns(student)
-	c.JSON(http.StatusOK, gin.H{
-		"data": "student successfully updated"})
+	database.DB.Save(&student)
+	c.JSON(http.StatusOK, student)
 }
 
 func GetStudentByCPF(c *gin.Context) {
